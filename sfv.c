@@ -92,8 +92,8 @@ void quiet_status(const char *name, int status) {
 void
 usage(void) {
 	extern char *__progname;
-	fprintf(stderr, "usage: %s [-d directory] -q sfv\n", __progname);
-	fprintf(stderr, "       %s -c [-d directory] -q sfv file ...\n", __progname);
+	fprintf(stderr, "usage: %s [-d directory] [-qs] sfv\n", __progname);
+	fprintf(stderr, "       %s -c [-d directory] [-qs] sfv file ...\n", __progname);
 	exit(1);
 }
 
