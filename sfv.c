@@ -36,39 +36,41 @@ int missing = 0;
 int total = 0;
 
 void verify_status(const char *name, int status) {
-	printf("%s ", name);
+	const char *status_string;
 	total++;
 	switch (status) {
 	case 0:
-		printf("missing.\n");
+		status_string = "missing.";
 		missing++;
 		break;
 	case SFV_FOUND:
-		printf("bad crc.\n");
+		status_string = "bad crc.";
 		bad++;
 		break;
 	case SFV_FOUND | SFV_CRC_OK:
-		printf("crc ok.\n");
+		status_string = "crc ok.";
 		break;
 	default:
-		errx(-1, "status()");
+		errx(-1, "verify_status()");
 	}
+	printf("%s %s\n", name, status_string);
 }
 
 void create_status(const char *name, int status) {
-	printf("%s ", name);
+	const char *status_string;
 	total++;
 	switch (status) {
 	case 0:
-		printf("missing.\n");
+		status_string = "missing.";
 		missing++;
 		break;
 	case SFV_FOUND | SFV_CRC_OK:
-		printf("added.\n");
+		status_string = "added.";
 		break;
 	default:
-		errx(-1, "status()");
+		errx(-1, "create_status(): %s", name);
 	}
+	printf("%s %s\n", name, status_string);
 }
 
 void quiet_status(const char *name, int status) {
