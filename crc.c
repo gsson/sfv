@@ -102,13 +102,15 @@ crc32_file(const char *path) {
 		munmap(data, stat.st_size);
 	}
 	else {
-		int n;
+		ssize_t n;
 	
 		if ((data = malloc(BSIZE)) == NULL)
 			err(1, "malloc()");
 
 		n = read(fd, data, BSIZE);
 		while(n) {
+			if (n == -1)
+				err(-1, "read()");
 			crc = crc32(data, crc, n);
 			n = read(fd, data, BSIZE);
 		}
