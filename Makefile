@@ -6,9 +6,9 @@ INSTALL?=`which install`
 GROFF?=`which groff`
 
 # Use these CFLAGS for debugging
-#CFLAGS=-std=c99 -g -pedantic -Wall
+#CFLAGS=-ansi -g -pedantic -Wall
 
-CFLAGS+=-std=c99 -O2 -pedantic -Wall
+CFLAGS+=-ansi -O2 -pedantic -Wall
 
 .PHONY: all clean lint
 

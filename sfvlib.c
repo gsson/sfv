@@ -57,6 +57,7 @@ open_sfv(const char *path) {
 	struct sfv_list *list;
 	struct sfv_entry *e = NULL;
 	struct sfv_entry *e_last = NULL;
+	uint32_t crc;
 	FILE *f;
 
 	regex_t regex;
@@ -80,7 +81,7 @@ open_sfv(const char *path) {
 		if (regexec(&regex, line, 4, matches, 0) == 0) {
 			if (matches[1].rm_so != -1 && matches[3].rm_so != -1) {
 				errno = 0;
-				uint32_t crc = strtoul(line + matches[3].rm_so, NULL, 16);
+				crc = strtoul(line + matches[3].rm_so, NULL, 16);
 				if (errno) continue;
 
 				e->path = matchdup(line, &matches[1]);
@@ -218,12 +219,13 @@ void
 add_sfv(struct sfv_list *list, int c, char **paths) {
 	struct sfv_entry *e;
 	struct sfv_entry *e_last = NULL;
+	int i;
 
 	if (c > 0) {
 		if ((e = malloc(sizeof(struct sfv_entry))) == NULL)
 				err(-1, "malloc()");
 		
-		for (int i = 0; i < c; i++) {
+		for (i = 0; i < c; i++) {
 			e->path = strdup(paths[i]);
 			e->realpath = NULL;
 			e->crc = 0;

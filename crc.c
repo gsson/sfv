@@ -72,8 +72,10 @@ const uint32_t crc_table[256] = {
 
 uint32_t
 crc32(void * data, uint32_t crc, size_t length) {
+        uint8_t *p;
         uint8_t *end = (uint8_t *)data + length;
-        for (uint8_t *p = data; p < end; p++ ) {
+
+        for (p = data; p < end; p++ ) {
                 crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ *p];
         }
         
