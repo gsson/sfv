@@ -1,5 +1,3 @@
-# $Id$
-
 PREFIX?=/usr/local
 INSTALL_BIN?=${PREFIX}/bin
 INSTALL_MAN?=${PREFIX}/man/man1
