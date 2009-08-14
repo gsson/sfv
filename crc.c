@@ -23,6 +23,8 @@
 
 #include "crc.h"
 
+#define BSIZE 1024 * 1024
+
 const uint32_t crc_table[256] = {
 
 	0x00000000ul, 0x77073096ul, 0xee0e612cul, 0x990951baul, 0x076dc419ul, 0x706af48ful,
@@ -81,8 +83,6 @@ crc32(void * data, uint32_t crc, size_t length) {
         
         return crc;
 }
-
-#define BSIZE 1024 * 1024
 
 uint32_t
 crc32_file(const char *path) {
