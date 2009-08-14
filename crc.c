@@ -104,9 +104,8 @@ crc32_file(const char *path) {
 	else {
 		int n;
 	
-		data = malloc(BSIZE);
-		if (data == NULL)
-			errx(1, "malloc()");
+		if ((data = malloc(BSIZE)) == NULL)
+			err(1, "malloc()");
 
 		n = read(fd, data, BSIZE);
 		while(n) {
