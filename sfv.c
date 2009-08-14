@@ -94,7 +94,7 @@ usage(void) {
 	extern char *__progname;
 	fprintf(stderr, "usage: %s [-d directory] [-qs] sfv\n", __progname);
 	fprintf(stderr, "       %s -c [-d directory] [-qs] sfv file ...\n", __progname);
-	exit(1);
+	exit(-1);
 }
 
 int main(int argc, char **argv) {
@@ -144,30 +144,19 @@ int main(int argc, char **argv) {
 	
 	if (!create) {
 		list = open_sfv(sfv);
-		if (quiet) {
-			verify_sfv(list, dir, quiet_status);
-		}
-		else {
-			verify_sfv(list, dir, verify_status);
-		}
+		verify_sfv(list, dir, quiet?quiet_status:verify_status);
 	}
 	else {
 		list = create_sfv();
 		add_sfv(list, argc, argv);
-		if (quiet) {
-			update_sfv(list, dir, quiet_status);
-		}
-		else {
-			update_sfv(list, dir, create_status);
-		}
-			
+		update_sfv(list, dir, quiet?quiet_status:create_status);
 		save_sfv(list, sfv);
 	}
 	close_sfv(list);
 	
 	if (summary) {
 		if (create) {
-			printf("%s: %d files added, %d missing, %d bad.\n", sfv, total, missing, bad);
+			printf("%s: %d files added, %d missing.\n", sfv, total, missing);
 		}
 		else {
 			printf("%s: %d files tested, %d missing, %d bad.\n", sfv, total, missing, bad);
