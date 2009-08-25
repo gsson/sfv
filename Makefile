@@ -38,7 +38,6 @@ lint:
 
 ${TARGET}: ${OBJECTS}
 	${CC} ${CFLAGS} $> -o $@
-#	strip $@
 
 .c.o:
 	${CC} ${CFLAGS} -c $< -o $@
