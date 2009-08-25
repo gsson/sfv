@@ -5,7 +5,6 @@ INSTALL_MAN?=${PREFIX}/man/man1
 INSTALL?=`which install`
 GROFF?=`which groff`
 
-# Use these CFLAGS for debugging
 ifdef NDEBUG
   CFLAGS=-ansi -O2 -pedantic -Wall -D_BSD_SOURCE -DNDEBUG
 else
