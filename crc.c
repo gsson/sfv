@@ -98,6 +98,8 @@ crc32_file(const char *path) {
 		err(-1, "fstat()");
 	
 	if ((data = mmap(NULL, stat.st_size, PROT_READ, MAP_SHARED, fd, 0)) != MAP_FAILED) {
+		if (madvise(data, stat.st_size, MADV_SEQUENTIAL) == -1)
+			warn("madvise()");
 		crc = crc32(data, crc, stat.st_size);
 		munmap(data, stat.st_size);
 	}
