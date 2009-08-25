@@ -6,9 +6,11 @@ INSTALL?=`which install`
 GROFF?=`which groff`
 
 # Use these CFLAGS for debugging
-#CFLAGS=-ansi -g -pedantic -Wall
-
-CFLAGS+=-ansi -O2 -pedantic -Wall
+.ifdef NDEBUG
+  CFLAGS=-ansi -O2 -pedantic -Wall -D_BSD_SOURCE -DNDEBUG
+.else
+  CFLAGS=-ansi -g -pedantic -Wall -D_BSD_SOURCE
+.endif
 
 .PHONY: all clean lint
 
