@@ -1,0 +1,68 @@
+.\" $Id$
+.\" 
+.\" Copyright (c) 2007 Henrik Gustafsson <henrik.gustafsson@fnord.se>
+.\" 
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\" 
+.Dd November 11 2007
+.Dt SFV 1
+.Os
+.Sh NAME
+.Nm sfv
+.Nd "Creates and verifies sfv files."
+.Sh SYNOPSIS
+.Nm sfv
+.Op Fl d Ar directory
+.Op Fl qs
+.Ar sfv-file
+.Nm sfv
+.Fl c
+.Op Fl d Ar directory
+.Op Fl qs
+.Ar sfv-file
+.Ar file
+.Op Ar ...
+.Sh DESCRIPTION
+.Nm
+is used to generate or verify checksums.
+The format used for storing the checksums is the so-called 'sfv' format.
+.Pp
+The options:
+.Bl -tag -width Ds
+.It Fl q
+Quiet operation.
+.It Fl s
+Output summary after completed verification. 
+.It Fl c
+Create
+.Ar sfv-file
+from
+.Ar file
+.Op Ar ...
+.El
+.Sh RETURN VALUES
+The
+.Nm sfv
+utility exits with one of the following values:
+.Bl -tag -width Ds
+.It -1
+An error was encountered.
+.It 0
+Verification was successful.
+.It 1
+One or more files were missing.
+.It 2
+One or more files failed verification.
+.It 3
+One or more files were missing and one or more files failed verification.
+.El
