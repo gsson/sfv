@@ -88,10 +88,10 @@ union value {
 
 
 static uint32_t
-crc32_aligned8(uint8_t * data, uint32_t crc, size_t length) {
-        const uint8_t *bend = data + length;
+crc32_aligned8(uint8_t *data, uint32_t crc, size_t length) {
+        const uint8_t *end = data + length;
 
-        for (; data < bend; data++) {
+        for (; data < end; data++) {
                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ *data];
         }
 
@@ -99,10 +99,10 @@ crc32_aligned8(uint8_t * data, uint32_t crc, size_t length) {
 }
 
 static uint32_t
-crc32_aligned64(uint64_t * data, uint32_t crc, size_t length) {
-        const uint64_t *wend = data + (length >> 3);
+crc32_aligned64(uint64_t *data, uint32_t crc, size_t length) {
+        const uint64_t *end = data + (length >> 3);
 
-        for (; data < wend; data++ ) {
+        for (; data < end; data++ ) {
                 union value v;
                 v.v64 = *data;
                 crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b0];
@@ -118,7 +118,7 @@ crc32_aligned64(uint64_t * data, uint32_t crc, size_t length) {
 }
 
 uint32_t
-crc32(void * data, uint32_t crc, size_t length) {
+crc32(void *data, uint32_t crc, size_t length) {
         size_t op_length;
 
         uint8_t *p = (uint8_t *) data;
