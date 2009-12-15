@@ -36,6 +36,12 @@ html:
 lint:
 	lint *.c -C${TARGET} -H -I. -I/usr/include
 
+test: crctest
+	./crctest
+
+crctest: crctest.o crc.o
+	${CC} ${CFLAGS} $> -o $@
+
 ${TARGET}: ${OBJECTS}
 	${CC} ${CFLAGS} $> -o $@
 
