@@ -72,15 +72,70 @@ const uint32_t crc_table[256] = {
 	0xb40bbe37ul, 0xc30c8ea1ul, 0x5a05df1bul, 0x2d02ef8dul
 };
 
+union value {
+  struct {
+      uint8_t b0;
+      uint8_t b1;
+      uint8_t b2;
+      uint8_t b3;
+      uint8_t b4;
+      uint8_t b5;
+      uint8_t b6;
+      uint8_t b7;
+  } v8;
+  uint64_t v64;
+};
+
+
+static uint32_t
+crc32_aligned8(uint8_t * data, uint32_t crc, size_t length) {
+        const uint8_t *bend = data + length;
+
+        for (; data < bend; data++) {
+               crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ *data];
+        }
+
+        return crc;
+}
+
+static uint32_t
+crc32_aligned64(uint64_t * data, uint32_t crc, size_t length) {
+        const uint64_t *wend = data + (length >> 3);
+
+        for (; data < wend; data++ ) {
+                union value v;
+                v.v64 = *data;
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b0];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b1];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b2];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b3];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b4];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b5];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b6];
+                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ v.v8.b7];
+        }
+        return crc;
+}
+
 uint32_t
 crc32(void * data, uint32_t crc, size_t length) {
-        uint8_t *p;
-        uint8_t *end = (uint8_t *)data + length;
+        size_t op_length;
 
-        for (p = data; p < end; p++ ) {
-                crc = (crc >> 8) ^ crc_table[(crc & 0xff) ^ *p];
-        }
-        
+        uint8_t *p = (uint8_t *) data;
+        uintptr_t unalignment_length = ((uintptr_t) data) & 7;
+
+        op_length = (length > unalignment_length)?unalignment_length:length;
+        crc = crc32_aligned8(data, crc, op_length);
+        length -= op_length;
+        p += op_length;
+
+        op_length = length & ~7;
+        crc = crc32_aligned64((uint64_t *) p, crc, op_length);
+        length -= op_length;
+        p += op_length;
+
+        crc = crc32_aligned8((uint8_t *) p, crc, length);
+
         return crc;
 }
 
