@@ -16,6 +16,8 @@ GROFF?=`which groff`
 TARGET=sfv
 OBJECTS=sfvlib.o sfv.o crc.o
 MAN=sfv.1
+TEST_TARGET=crctest
+TEST_OBJECTS=crctest.o crc.o
 
 all: ${TARGET}
 
@@ -26,6 +28,8 @@ install: ${TARGET}
 clean:
 	rm -f ${TARGET}
 	rm -f ${OBJECTS}
+	rm -f ${TEST_TARGET}
+	rm -f ${TEST_OBJECTS}
 	rm -f llib-lsfv.ln
 
 obj: ${OBJECTS}
@@ -36,10 +40,10 @@ html:
 lint:
 	lint *.c -C${TARGET} -H -I. -I/usr/include
 
-test: crctest
+test: ${TEST_TARGET}
 	./crctest
 
-crctest: crctest.o crc.o
+${TEST_TARGET}: ${TEST_OBJECTS}
 	${CC} ${CFLAGS} $> -o $@
 
 ${TARGET}: ${OBJECTS}
