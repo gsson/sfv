@@ -122,12 +122,15 @@ crc32(void * data, uint32_t crc, size_t length) {
         size_t op_length;
 
         uint8_t *p = (uint8_t *) data;
-        uintptr_t unalignment_length = ((uintptr_t) data) & 7;
 
-        op_length = (length > unalignment_length)?unalignment_length:length;
-        crc = crc32_aligned8(data, crc, op_length);
-        length -= op_length;
-        p += op_length;
+        if (((uintptr_t) data) & 7) {
+            uintptr_t unalignment_length = 8 - (((uintptr_t) data) & 7);
+
+            op_length = (length > unalignment_length)?unalignment_length:length;
+            crc = crc32_aligned8(data, crc, op_length);
+            length -= op_length;
+            p += op_length;
+        }
 
         op_length = length & ~7;
         crc = crc32_aligned64((uint64_t *) p, crc, op_length);
